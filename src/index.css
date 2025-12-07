@@ -48,4 +48,22 @@ body {
   animation: toastUp 1.5s ease forwards;
 }
 
+/* Increase global text size slightly */
+.text-scale {
+  font-size: 1.06rem !important;
+}
+
+/* Prevent scaling for the main title */
+.text-scale h1,
+.text-scale h2 {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Prevent scaling for the big couple name */
+.text-scale .couple-name {
+  font-size: inherit !important;
+}
+
+
 

@@ -225,7 +225,7 @@ const App: React.FC = () => {
           </header>
 
           {/* ===== MAIN CONTENT (THIỆP) ===== */}
-          <main className="max-w-3xl mx-auto px-0 pb-10 pt-6 md:pt-8">
+          <main className="max-w-3xl mx-auto px-0 pb-10 pt-6 md:pt-8 text-scale">
             <div className="rounded-[24px] bg-white/95 backdrop-blur-md shadow-md border border-[#5E7941]/18 overflow-hidden">
               {/* TOP DECOR LINE */}
               <div className="h-1 w-full bg-gradient-to-r from-[#5E7941]/10 via-[#5E7941]/40 to-[#5E7941]/10" />
@@ -233,19 +233,18 @@ const App: React.FC = () => {
               <div className="px-6 pb-7 pt-6 md:px-8 md:pb-9 space-y-6 md:space-y-7">
                 {/* LỜI MỜI */}
                 <section className="text-center space-y-2">
-                  <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941]">
+                  <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-[#5E7941]">
                     Lời mời
                   </p>
+
                   <p className="text-sm md:text-base text-stone-700">
                     Chúng mình rất hân hạnh được đón tiếp bạn đến chung vui
                     trong ngày trọng đại của{" "}
                   </p>
-                  {/* <h2 className="font-script text-[#5E7941] text-3xl md:text-4xl">
+
+                  <p className="font-playfair text-[#5E7941] text-2xl md:text-4xl">
                     {weddingInfo.coupleNames}
-                  </h2> */}
-                  <h2 className="font-playfair text-[#5E7941] text-3xl md:text-4xl">
-                    {weddingInfo.coupleNames}
-                  </h2>
+                  </p>
                 </section>
 
                 {/* DIVIDER */}
@@ -253,19 +252,19 @@ const App: React.FC = () => {
 
                 {/* ĐỊA CHỈ + TÊN + CHA MẸ */}
                 <section className="space-y-4">
-                  <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941] text-center">
+                  <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-[#5E7941] text-center">
                     Gia đình hai bên
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Nhà trai */}
                     <div className="rounded-2xl bg-[#5E7941]/5 px-4 py-3">
                       <div className="flex justify-center mb-3">
-                        <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                           Nhà Trai
                         </p>
                       </div>
 
-                      <div className="mt-2 space-y-1.5 text-xs md:text-sm text-stone-700">
+                      <div className="mt-2 space-y-1.5 text-sm md:text-base text-stone-700">
                         <div className="grid grid-cols-12 gap-1">
                           <span className="col-span-4 font-medium">
                             Chú rể:
@@ -299,12 +298,12 @@ const App: React.FC = () => {
                     {/* Nhà gái */}
                     <div className="rounded-2xl bg-[#5E7941]/5 px-4 py-3">
                       <div className="flex justify-center mb-3">
-                        <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                           Nhà gái
                         </p>
                       </div>
 
-                      <div className="mt-2 space-y-1.5 text-xs md:text-sm text-stone-700">
+                      <div className="mt-2 space-y-1.5 text-sm md:text-base text-stone-700">
                         <div className="grid grid-cols-12 gap-1">
                           <span className="col-span-4 font-medium">
                             Cô dâu:
@@ -342,31 +341,31 @@ const App: React.FC = () => {
 
                 {/* THỜI GIAN DẠNG 2 CỘT */}
                 <section className="space-y-4">
-                  <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941] text-center">
+                  <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-[#5E7941] text-center">
                     Thời gian tổ chức
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                      <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                      <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                         Tiệc cưới
                       </p>
-                      <p className="mt-2 text-base font-semibold text-stone-800">
+                      <p className="mt-2 text-lg font-semibold text-stone-800">
                         {weddingInfo.partyDate}
                       </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
+                      <p className="mt-1 text-sm md:text-base text-stone-600">
                         Tiệc chung vui cùng gia đình hai họ.
                       </p>
                     </div>
 
                     <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                      <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                      <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                         Lễ thành hôn
                       </p>
-                      <p className="mt-2 text-base font-semibold text-stone-800">
+                      <p className="mt-2 text-lg font-semibold text-stone-800">
                         {weddingInfo.ceremonyDate}
                       </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
+                      <p className="mt-1 text-sm md:text-base text-stone-600">
                         Lễ thành hôn trong không khí ấm áp và thân mật.
                       </p>
                     </div>
@@ -378,9 +377,10 @@ const App: React.FC = () => {
 
                 {/* BẢN ĐỒ */}
                 <section className="space-y-4">
-                  <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941] text-center">
+                  <p className="text-sm md:text-sm tracking-[0.3em] uppercase text-[#5E7941] text-center">
                     Bản đồ
                   </p>
+
                   <div
                     className={`grid gap-4 ${
                       showBride && showGroom
@@ -390,10 +390,10 @@ const App: React.FC = () => {
                   >
                     {showGroom && (
                       <div className="rounded-2xl bg-[#f9faf7] p-3">
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E7941]">
                           Nhà trai
                         </p>
-                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                        <p className="mt-1 text-sm md:text-base text-stone-600">
                           {groom.address}
                         </p>
                         <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
@@ -410,10 +410,10 @@ const App: React.FC = () => {
 
                     {showBride && (
                       <div className="rounded-2xl bg-[#f9faf7] p-3">
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E7941]">
                           Nhà gái
                         </p>
-                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                        <p className="mt-1 text-sm md:text-base text-stone-600">
                           {bride.address}
                         </p>
                         <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
@@ -435,10 +435,11 @@ const App: React.FC = () => {
 
                 {/* QR / MỪNG CƯỚI */}
                 <section className="space-y-4">
-                  <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941] text-center">
+                  <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-[#5E7941] text-center">
                     Gửi lời chúc & mừng cưới
                   </p>
-                  <p className="text-center text-xs md:text-sm text-stone-600 max-w-xl mx-auto">
+
+                  <p className="text-center text-sm md:text-base text-stone-600 max-w-xl mx-auto">
                     Nếu không tiện đến chung vui, bạn có thể gửi lời chúc và
                     mừng cưới qua thông tin bên dưới. Mọi lời chúc đều là món
                     quà vô cùng trân quý với chúng mình.
@@ -453,15 +454,17 @@ const App: React.FC = () => {
                   >
                     {showGroom && (
                       <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E7941]">
                           Chú rể
                         </p>
                         <p className="mt-1 font-semibold">{groom.name}</p>
-                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+
+                        <p className="mt-1 text-sm md:text-base text-stone-600">
                           {groom.bankName} – {groom.bankOwner}
                         </p>
+
                         <div className="flex items-center justify-center gap-2 mt-1">
-                          <p className="text-xs md:text-sm text-stone-800">
+                          <p className="text-sm md:text-base text-stone-800">
                             STK:{" "}
                             <span className="font-semibold">
                               {groom.bankNumber}
@@ -486,15 +489,17 @@ const App: React.FC = () => {
 
                     {showBride && (
                       <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E7941]">
                           Cô dâu
                         </p>
                         <p className="mt-1 font-semibold">{bride.name}</p>
-                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+
+                        <p className="mt-1 text-sm md:text-base text-stone-600">
                           {bride.bankName} – {bride.bankOwner}
                         </p>
+
                         <div className="flex items-center justify-center gap-2 mt-1">
-                          <p className="text-xs md:text-sm text-stone-800">
+                          <p className="text-sm md:text-base text-stone-800">
                             STK:{" "}
                             <span className="font-semibold">
                               {bride.bankNumber}
