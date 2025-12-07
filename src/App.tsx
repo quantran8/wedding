@@ -38,6 +38,8 @@ const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [showFireworks, setShowFireworks] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<any>(null);
 
   const searchParams = new URLSearchParams(window.location.search);
   const isBride = searchParams.get("isbride") === "true";
@@ -48,26 +50,26 @@ const App: React.FC = () => {
 
   const groom: PersonInfo = {
     name: "Đình Quân",
-    fatherName: "Ông: Trần Đại Nghĩa",
-    motherName: "Bà: Dương Thị Hạnh",
+    fatherName: "Trần Đại Nghĩa",
+    motherName: "Dương Thị Hạnh",
     bankName: "Techcombank",
     bankOwner: "TRAN DINH QUAN",
     bankNumber: "555633888888",
     qrImage: QrGroom,
-    address: "Nhà trai: Yên Ninh, Hiền Ninh, Sóc Sơn, Hà Nội",
+    address: "Xóm sau, Yên Ninh, Nội Bài, Hà Nội",
     mapEmbedUrl:
       "https://www.google.com/maps?q=21.244423, 105.788692&z=16&output=embed",
   };
 
   const bride: PersonInfo = {
     name: "Ngọc Anh",
-    fatherName: "Ông: Dương Văn Tầm",
-    motherName: "Bà: Nguyễn Mai Lan",
+    fatherName: "Dương Văn Tầm",
+    motherName: "Nguyễn Mai Lan",
     bankName: "Techcombank",
     bankOwner: "DUONG THI NGOC ANH",
     bankNumber: "19135591419017",
     qrImage: QrBride,
-    address: "Nhà gái: Số 10, Thanh trí, Minh phú, Hà Nội",
+    address: "Số 10, Thanh trí, Minh phú, Hà Nội",
     mapEmbedUrl:
       "https://www.google.com/maps?q=21.270180, 105.763232&z=16&output=embed",
   };
@@ -81,9 +83,19 @@ const App: React.FC = () => {
     ceremonyDate: "21 / 12 / 2025",
   };
 
+  const showToast = (message: string) => {
+    setToastMessage(message);
+
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+
+    toastTimerRef.current = setTimeout(() => {
+      setToastMessage(null);
+    }, 1500);
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      alert("Đã sao chép số tài khoản!");
+      showToast("Đã sao chép số tài khoản");
     });
   };
 
@@ -93,12 +105,14 @@ const App: React.FC = () => {
     if (!audio) return;
 
     const playMusic = () => {
-      if (isPlaying) return;
+      if (isPlaying) {
+        removeListeners();
+        return;
+      }
       audio
         .play()
         .then(() => {
           setIsPlaying(true);
-          removeListeners();
         })
         .catch(() => {});
     };
@@ -226,7 +240,10 @@ const App: React.FC = () => {
                     Chúng mình rất hân hạnh được đón tiếp bạn đến chung vui
                     trong ngày trọng đại của{" "}
                   </p>
-                  <h2 className="font-semibold text-[#5E7941]">
+                  {/* <h2 className="font-script text-[#5E7941] text-3xl md:text-4xl">
+                    {weddingInfo.coupleNames}
+                  </h2> */}
+                  <h2 className="font-playfair text-[#5E7941] text-3xl md:text-4xl">
                     {weddingInfo.coupleNames}
                   </h2>
                 </section>
@@ -242,40 +259,80 @@ const App: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Nhà trai */}
                     <div className="rounded-2xl bg-[#5E7941]/5 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
-                        Nhà trai
-                      </p>
-                      <p className="mt-1 font-semibold text-stone-800">
-                        {groom.name}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-700">
-                        {groom.fatherName}
-                      </p>
-                      <p className="text-xs md:text-sm text-stone-700">
-                        {groom.motherName}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {groom.address}
-                      </p>
+                      <div className="flex justify-center mb-3">
+                        <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                          Nhà Trai
+                        </p>
+                      </div>
+
+                      <div className="mt-2 space-y-1.5 text-xs md:text-sm text-stone-700">
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">
+                            Chú rể:
+                          </span>
+                          <span className="col-span-8 text-stone-800 font-semibold">
+                            {groom.name}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">Ông:</span>
+                          <span className="col-span-8">{groom.fatherName}</span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">Bà:</span>
+                          <span className="col-span-8">{groom.motherName}</span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">
+                            Địa chỉ:
+                          </span>
+                          <span className="col-span-8 text-stone-600">
+                            {groom.address}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Nhà gái */}
                     <div className="rounded-2xl bg-[#5E7941]/5 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
-                        Nhà gái
-                      </p>
-                      <p className="mt-1 font-semibold text-stone-800">
-                        {bride.name}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-700">
-                        {bride.fatherName}
-                      </p>
-                      <p className="text-xs md:text-sm text-stone-700">
-                        {bride.motherName}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {bride.address}
-                      </p>
+                      <div className="flex justify-center mb-3">
+                        <p className="text-xs uppercase tracking-[0.25em] text-[#5E7941]">
+                          Nhà gái
+                        </p>
+                      </div>
+
+                      <div className="mt-2 space-y-1.5 text-xs md:text-sm text-stone-700">
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">
+                            Cô dâu:
+                          </span>
+                          <span className="col-span-8 text-stone-800 font-semibold">
+                            {bride.name}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">Ông:</span>
+                          <span className="col-span-8">{bride.fatherName}</span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">Bà:</span>
+                          <span className="col-span-8">{bride.motherName}</span>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-1">
+                          <span className="col-span-4 font-medium">
+                            Địa chỉ:
+                          </span>
+                          <span className="col-span-8 text-stone-600">
+                            {bride.address}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -475,7 +532,7 @@ const App: React.FC = () => {
               />
               {/* <div className="absolute inset-0 bg-black/20" /> */}
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 md:pb-4">
-                <p className="text-center text-xs md:text-sm text-[#5E7941]/70 px-4">
+                <p className="text-center text-sm md:text-base text-[#5E7941]/70 px-4">
                   Rất mong nhận được sự hiện diện và lời chúc phúc của bạn trong
                   ngày vui của chúng mình ✨
                 </p>
@@ -484,6 +541,21 @@ const App: React.FC = () => {
           </footer>
         </div>
       </div>
+      {/* === TOAST === */}
+      {/* === TOAST === */}
+      {toastMessage && (
+        <div
+          className="
+            fixed bottom-6 left-1/2
+            -translate-x-1/2
+            bg-[#5E7941] text-white px-4 py-2 rounded-full shadow-lg
+            text-sm md:text-base z-[999]
+            animate-toast-up
+          "
+        >
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 };

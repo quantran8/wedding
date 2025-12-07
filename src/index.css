@@ -31,3 +31,21 @@ body {
 .font-script {
   font-family: "Great Vibes", cursive;
 }
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+
+@keyframes toastUp {
+  0% { transform: translate(0%, 150%); opacity: 0; }
+  20% { transform: translate(0%, 0); opacity: 1; }
+  80% { transform: translate(0%, 0); opacity: 1; }
+  100% { transform: translate(0%, 150%); opacity: 0; }
+}
+
+.animate-toast-up {
+  animation: toastUp 1.5s ease forwards;
+}
+
+
