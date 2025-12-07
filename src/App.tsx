@@ -4,8 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import HeaderImage from "./assets/header-wedding.jpg";
 import FooterImage from "./assets/footer-wedding.jpg";
 import PerfectSong from "./assets/perfect.mp3";
-// import QrGroom from "./assets/qr-groom.png";
-// import QrBride from "./assets/qr-bride.png";
+import QrGroom from "./assets/chure_qr.jpg";
+import QrBride from "./assets/codau_qr.jpg";
+import CopyIcon from "./assets/copy.png";
+
+import MusicLottie from "./assets/music-icon.json"; // 👈 your Lottie JSON
+import FireworkLottie from "./assets/firework.json"; // 👈 your Lottie JSON
+
+import Lottie from "react-lottie-player"; // 👈 Lottie component
 
 interface PersonInfo {
   name: string;
@@ -16,7 +22,7 @@ interface PersonInfo {
   bankNumber: string;
   address: string;
   mapEmbedUrl: string;
-  // qrImage?: string;
+  qrImage: string;
 }
 
 interface WeddingInfo {
@@ -33,13 +39,21 @@ const App: React.FC = () => {
   const [showFireworks, setShowFireworks] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const isBride = searchParams.get("isbride") === "true";
+  const isGroom = searchParams.get("isgroom") === "true";
+
+  const showBride = isBride || (!isBride && !isGroom);
+  const showGroom = isGroom || (!isBride && !isGroom);
+
   const groom: PersonInfo = {
     name: "Đình Quân",
     fatherName: "Ông: Trần Đại Nghĩa",
     motherName: "Bà: Dương Thị Hạnh",
-    bankName: "Vietcombank",
-    bankOwner: "DINH QUAN",
-    bankNumber: "0123456789",
+    bankName: "Techcombank",
+    bankOwner: "TRAN DINH QUAN",
+    bankNumber: "555633888888",
+    qrImage: QrGroom,
     address: "Nhà trai: Yên Ninh, Hiền Ninh, Sóc Sơn, Hà Nội",
     mapEmbedUrl:
       "https://www.google.com/maps?q=21.244423, 105.788692&z=16&output=embed",
@@ -50,8 +64,9 @@ const App: React.FC = () => {
     fatherName: "Ông: Dương Văn Tầm",
     motherName: "Bà: Nguyễn Mai Lan",
     bankName: "Techcombank",
-    bankOwner: "NGOC ANH",
-    bankNumber: "0987654321",
+    bankOwner: "DUONG THI NGOC ANH",
+    bankNumber: "19135591419017",
+    qrImage: QrBride,
     address: "Nhà gái: Số 10, Thanh trí, Minh phú, Hà Nội",
     mapEmbedUrl:
       "https://www.google.com/maps?q=21.270180, 105.763232&z=16&output=embed",
@@ -66,21 +81,42 @@ const App: React.FC = () => {
     ceremonyDate: "21 / 12 / 2025",
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Đã sao chép số tài khoản!");
+    });
+  };
+
   // ==== AUTO PLAY NHẠC (NẾU BROWSER CHO PHÉP) ==== //
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const playMusic = async () => {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch {
-        setIsPlaying(false);
-      }
+    const playMusic = () => {
+      if (isPlaying) return;
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          removeListeners();
+        })
+        .catch(() => {});
     };
 
-    void playMusic();
+    const onFirstTap = () => playMusic();
+    const onFirstScroll = () => playMusic();
+
+    const removeListeners = () => {
+      window.removeEventListener("touchstart", onFirstTap);
+      window.removeEventListener("click", onFirstTap);
+      window.removeEventListener("scroll", onFirstScroll);
+    };
+
+    window.addEventListener("touchstart", onFirstTap, { once: true });
+    window.addEventListener("click", onFirstTap, { once: true });
+    window.addEventListener("scroll", onFirstScroll, { once: true });
+
+    return removeListeners;
   }, []);
 
   // ==== ẨN FIREWORKS SAU 4 GIÂY ==== //
@@ -109,50 +145,43 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-[#f5f7f2] text-stone-800 relative overflow-hidden">
-      {/* ==== FIREWORKS OVERLAY ==== */}
-      {showFireworks && (
-        <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden">
-          <div className="firework firework-1" />
-          <div className="firework firework-2" />
-          <div className="firework firework-3" />
-        </div>
-      )}
+    <div className="min-h-screen bg-[#f5f7f2] text-stone-800 relative overflow-hidden">
+      {/* FIREWORKS, AUDIO, etc. */}
 
-      {/* ==== AUDIO ==== */}
-      <audio ref={audioRef} src={PerfectSong} loop />
-
-      {/* ==== BUTTON MUSIC ==== */}
-      <button
-        type="button"
-        onClick={togglePlay}
-        className="fixed bottom-4 right-4 z-50 w-12 h-12 rounded-full bg-[#5E7941] text-white shadow-lg flex items-center justify-center hover:bg-[#4b6234] hover:scale-105 active:scale-95 transition-transform duration-150"
-        title={isPlaying ? "Tạm dừng nhạc" : "Phát nhạc"}
-      >
-        {isPlaying ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M8 5h3v14H8zM13 5h3v14h-3z" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
+      <div className="relative max-w-4xl mx-auto px-4 py-4 md:py-6">
+        {showFireworks && (
+          <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden w-full h-full">
+            <Lottie
+              loop
+              animationData={FireworkLottie}
+              play
+              className="w-full h-full"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+              speed={0.7}
+            />
+          </div>
         )}
-      </button>
 
-      {/* ===== WRAPPER CĂN GIỮA + MAX WIDTH ===== */}
-      <div className="flex justify-center px-4 py-4 md:py-6">
-        <div className="w-full max-w-4xl">
+        {/* ==== AUDIO ==== */}
+        <audio id="audio" ref={audioRef} src={PerfectSong} loop />
+
+        {/* ==== BUTTON MUSIC ==== */}
+        <div className="fixed bottom-2 right-2 z-50">
+          <Lottie
+            loop
+            animationData={MusicLottie}
+            play={isPlaying} // 👈 play/pause animation according to music
+            style={{ width: 80, height: 80 }} // ~w-8 h-8
+            speed={0.5}
+            onClick={togglePlay}
+          />
+        </div>
+
+        <div className="w-full max-w-4xl mx-auto">
           {/* ===== HEADER FULL IMAGE (TITLE Ở TRÊN) ===== */}
           <header className="relative w-full overflow-hidden rounded-3xl bg-white shadow-lg border border-[#5E7941]/20">
             <img
@@ -196,11 +225,10 @@ const App: React.FC = () => {
                   <p className="text-sm md:text-base text-stone-700">
                     Chúng mình rất hân hạnh được đón tiếp bạn đến chung vui
                     trong ngày trọng đại của{" "}
-                    <h2 className="font-semibold text-[#5E7941]">
-                      {weddingInfo.coupleNames}
-                    </h2>
-                    .
                   </p>
+                  <h2 className="font-semibold text-[#5E7941]">
+                    {weddingInfo.coupleNames}
+                  </h2>
                 </section>
 
                 {/* DIVIDER */}
@@ -296,42 +324,52 @@ const App: React.FC = () => {
                   <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-[#5E7941] text-center">
                     Bản đồ
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="rounded-2xl bg-[#f9faf7] p-3">
-                      <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
-                        Nhà trai
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {groom.address}
-                      </p>
-                      <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
-                        <iframe
-                          src={groom.mapEmbedUrl}
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          className="w-full h-full border-0"
-                          title="Google Map nhà trai"
-                        />
+                  <div
+                    className={`grid gap-4 ${
+                      showBride && showGroom
+                        ? "grid-cols-1 md:grid-cols-2"
+                        : "grid-cols-1"
+                    }`}
+                  >
+                    {showGroom && (
+                      <div className="rounded-2xl bg-[#f9faf7] p-3">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                          Nhà trai
+                        </p>
+                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                          {groom.address}
+                        </p>
+                        <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
+                          <iframe
+                            src={groom.mapEmbedUrl}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="w-full h-full border-0"
+                            title="Google Map nhà trai"
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="rounded-2xl bg-[#f9faf7] p-3">
-                      <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
-                        Nhà gái
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {bride.address}
-                      </p>
-                      <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
-                        <iframe
-                          src={bride.mapEmbedUrl}
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          className="w-full h-full border-0"
-                          title="Google Map nhà gái"
-                        />
+                    {showBride && (
+                      <div className="rounded-2xl bg-[#f9faf7] p-3">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                          Nhà gái
+                        </p>
+                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                          {bride.address}
+                        </p>
+                        <div className="mt-2 w-full h-40 md:h-44 rounded-xl overflow-hidden">
+                          <iframe
+                            src={bride.mapEmbedUrl}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="w-full h-full border-0"
+                            title="Google Map nhà gái"
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </section>
 
@@ -349,38 +387,78 @@ const App: React.FC = () => {
                     quà vô cùng trân quý với chúng mình.
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                      <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
-                        Chú rể
-                      </p>
-                      <p className="mt-1 font-semibold">{groom.name}</p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {groom.bankName} – {groom.bankOwner}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-800">
-                        STK:{" "}
-                        <span className="font-semibold">
-                          {groom.bankNumber}
-                        </span>
-                      </p>
-                    </div>
+                  <div
+                    className={`grid gap-4 ${
+                      showBride && showGroom
+                        ? "grid-cols-1 md:grid-cols-2"
+                        : "grid-cols-1"
+                    }`}
+                  >
+                    {showGroom && (
+                      <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                          Chú rể
+                        </p>
+                        <p className="mt-1 font-semibold">{groom.name}</p>
+                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                          {groom.bankName} – {groom.bankOwner}
+                        </p>
+                        <div className="flex items-center justify-center gap-2 mt-1">
+                          <p className="text-xs md:text-sm text-stone-800">
+                            STK:{" "}
+                            <span className="font-semibold">
+                              {groom.bankNumber}
+                            </span>
+                          </p>
 
-                    <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
-                      <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
-                        Cô dâu
-                      </p>
-                      <p className="mt-1 font-semibold">{bride.name}</p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-600">
-                        {bride.bankName} – {bride.bankOwner}
-                      </p>
-                      <p className="mt-1 text-xs md:text-sm text-stone-800">
-                        STK:{" "}
-                        <span className="font-semibold">
-                          {bride.bankNumber}
-                        </span>
-                      </p>
-                    </div>
+                          <img
+                            src={CopyIcon}
+                            alt="copy"
+                            className="w-4 h-4 cursor-pointer hover:opacity-70 active:scale-90"
+                            onClick={() => copyToClipboard(groom.bankNumber)}
+                          />
+                        </div>
+
+                        <img
+                          src={groom.qrImage}
+                          alt="qr code"
+                          className="mt-2 mx-auto w-40"
+                        />
+                      </div>
+                    )}
+
+                    {showBride && (
+                      <div className="rounded-2xl bg-[#f9faf7] px-4 py-3 text-center">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#5E7941]">
+                          Cô dâu
+                        </p>
+                        <p className="mt-1 font-semibold">{bride.name}</p>
+                        <p className="mt-1 text-xs md:text-sm text-stone-600">
+                          {bride.bankName} – {bride.bankOwner}
+                        </p>
+                        <div className="flex items-center justify-center gap-2 mt-1">
+                          <p className="text-xs md:text-sm text-stone-800">
+                            STK:{" "}
+                            <span className="font-semibold">
+                              {bride.bankNumber}
+                            </span>
+                          </p>
+
+                          <img
+                            src={CopyIcon}
+                            alt="copy"
+                            className="w-4 h-4 cursor-pointer hover:opacity-70 active:scale-90"
+                            onClick={() => copyToClipboard(bride.bankNumber)}
+                          />
+                        </div>
+
+                        <img
+                          src={bride.qrImage}
+                          alt="qr code"
+                          className="mt-2 mx-auto w-40"
+                        />
+                      </div>
+                    )}
                   </div>
                 </section>
               </div>
