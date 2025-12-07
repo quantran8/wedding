@@ -114,7 +114,9 @@ const App: React.FC = () => {
         .then(() => {
           setIsPlaying(true);
         })
-        .catch(() => {});
+        .catch(() => {
+          console.error("Cannot play audio");
+        });
     };
 
     const onFirstTap = () => playMusic();
