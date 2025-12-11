@@ -352,7 +352,10 @@ const App: React.FC = () => {
                       <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                         Tiệc cưới
                       </p>
-                      <p className="mt-2 text-lg font-semibold text-stone-800">
+                      <p className="mt-1 text-sm md:text-base text-stone-600">
+                        Được tổ chức vào 16h00, thứ bảy
+                      </p>
+                      <p className="mt-2 text-3xl font-semibold text-stone-800">
                         {weddingInfo.partyDate}
                       </p>
                       <p className="mt-1 text-sm md:text-base text-stone-600">
@@ -364,7 +367,10 @@ const App: React.FC = () => {
                       <p className="text-sm uppercase tracking-[0.25em] text-[#5E7941]">
                         Lễ thành hôn
                       </p>
-                      <p className="mt-2 text-lg font-semibold text-stone-800">
+                      <p className="mt-1 text-sm md:text-base text-stone-600">
+                        Được tổ chức vào 10h00, chủ nhật
+                      </p>
+                      <p className="mt-2 text-3xl font-semibold text-stone-800">
                         {weddingInfo.ceremonyDate}
                       </p>
                       <p className="mt-1 text-sm md:text-base text-stone-600">
