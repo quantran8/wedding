@@ -12,6 +12,7 @@ import MusicLottie from "./assets/music-icon.json"; // 👈 your Lottie JSON
 import FireworkLottie from "./assets/firework.json"; // 👈 your Lottie JSON
 
 import Lottie from "react-lottie-player"; // 👈 Lottie component
+import { Analytics } from "@vercel/analytics/next";
 
 interface PersonInfo {
   name: string;
@@ -163,7 +164,6 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f5f7f2] text-stone-800 relative overflow-hidden">
       {/* FIREWORKS, AUDIO, etc. */}
-
       <div className="relative max-w-4xl mx-auto px-4 py-4 md:py-6">
         {showFireworks && (
           <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden w-full h-full">
@@ -569,6 +569,7 @@ const App: React.FC = () => {
           {toastMessage}
         </div>
       )}
+      <Analytics />
     </div>
   );
 };
